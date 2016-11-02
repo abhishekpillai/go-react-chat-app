@@ -30,6 +30,7 @@
         var iso = new Date().toISOString();
         return iso.split("T")[1].split(".")[0];
       };
+
       ws.onmessage = function (msg) {
         var line =  now() + " " + msg.data + "\n";
         chat.innerText += line;
