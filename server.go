@@ -8,7 +8,7 @@ import (
 //  "github.com/gorilla/websocket"
 //  "github.com/garyburd/redigo/redis"
 //  "github.com/soveran/redisurl"
-//  "os"
+  "os"
   "database/sql"
   _ "github.com/go-sql-driver/mysql"
   "time"
@@ -23,7 +23,8 @@ func main() {
   r := gin.Default()
   m := melody.New()
 
-  db, _ := sql.Open("mysql", "abhishekpillai:@/sharedchat?charset=utf8")
+  db_url := os.Getenv("SHAREDCHAT_DB_URL")
+  db, _ := sql.Open("mysql", db_url)
 
   //// Connect using os.Getenv("REDIS_URL").
   // conn, err := redisurl.Connect()
