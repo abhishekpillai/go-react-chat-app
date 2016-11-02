@@ -9,7 +9,12 @@ import (
   "database/sql"
   _ "github.com/go-sql-driver/mysql"
   "time"
+  "encoding/json"
 )
+
+type Msg struct {
+  Username, Content string
+}
 
 func main() {
   r := gin.Default()
@@ -47,14 +52,19 @@ func main() {
     m.HandleRequest(c.Writer, c.Request)
   })
 
-  m.HandleMessage(func(s *melody.Session, msg []byte) {
-    fmt.Println(string(msg))
-    insert_stmt, _ := db.Prepare("INSERT messages SET user_id=?,message_type=?,content=?,timestamp=?")
-    _, err := insert_stmt.Exec(1, "text", string(msg), time.Now())
+  m.HandleMessage(func(s *melody.Session, message []byte) {
+    var msg_data Msg
+    err := json.Unmarshal(message, &msg_data)
     if err != nil {
       fmt.Println(err)
     }
-    m.Broadcast(msg)
+
+    insert_stmt, _ := db.Prepare("INSERT messages SET user_id=?,message_type=?,content=?,timestamp=?")
+    _, err = insert_stmt.Exec(1, "text", msg_data.Content, time.Now())
+    if err != nil {
+      fmt.Println(err)
+    }
+    m.Broadcast([]byte(msg_data.Content))
   })
 
   r.Run(":5000")
