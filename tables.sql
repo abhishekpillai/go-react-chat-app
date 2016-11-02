@@ -6,3 +6,9 @@ create table messages (
   timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id)
 )
+
+create table users (
+  id MEDIUMINT NOT NULL AUTO_INCREMENT,
+  username VARCHAR(40) NOT NULL,
+  PRIMARY KEY (id)
+)
