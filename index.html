@@ -12,6 +12,11 @@
       padding: 20px;
     }
   </style>
+  <script
+    src="https://code.jquery.com/jquery-3.1.1.min.js"
+      integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+      crossorigin="anonymous">
+  </script>
 
   <body>
     <center>
@@ -30,6 +35,12 @@
         var iso = new Date().toISOString();
         return iso.split("T")[1].split(".")[0];
       };
+      $.get("/allMessages", function (data) {
+        for (message in data["messages"]) {
+          var line =  now() + " " + data["messages"][message] + "\n";
+          chat.innerText += line;
+        }
+      });
 
       ws.onmessage = function (msg) {
         var line =  now() + " " + msg.data + "\n";

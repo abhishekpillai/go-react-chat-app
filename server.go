@@ -33,7 +33,7 @@ func main() {
   })
 
   r.GET("/allMessages", func(c *gin.Context) {
-    allMessages, err := redis.Strings(conn.Do("LRANGE", "messages", 0, 1000))
+    allMessages, _ := redis.Strings(conn.Do("LRANGE", "messages", 0, 1000))
     c.JSON(200, gin.H{
       "messages": allMessages,
     })
