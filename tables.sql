@@ -2,7 +2,7 @@ create table messages (
   id MEDIUMINT NOT NULL AUTO_INCREMENT,
   user_id MEDIUMINT,
   message_type VARCHAR(20) NOT NULL,
-  content VARCHAR(20) NOT NULL,
+  content TEXT NOT NULL,
   timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id)
 )

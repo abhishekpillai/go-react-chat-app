@@ -7,8 +7,8 @@ import (
   "net/http"
 //  "github.com/gorilla/websocket"
 //  "github.com/garyburd/redigo/redis"
-  "github.com/soveran/redisurl"
-  "os"
+//  "github.com/soveran/redisurl"
+//  "os"
   "database/sql"
   _ "github.com/go-sql-driver/mysql"
   "time"
@@ -24,15 +24,14 @@ func main() {
   m := melody.New()
 
   db, _ := sql.Open("mysql", "abhishekpillai:@/sharedchat?charset=utf8")
-  insert_stmt, _ := db.Prepare("INSERT messages SET user_id=?,message_type=?,content=?,timestamp=?")
 
-  // Connect using os.Getenv("REDIS_URL").
-  conn, err := redisurl.Connect()
-  if err != nil {
-    fmt.Println(err)
-    os.Exit(1)
-  }
-  defer conn.Close()
+  //// Connect using os.Getenv("REDIS_URL").
+  // conn, err := redisurl.Connect()
+  // if err != nil {
+  //   fmt.Println(err)
+  //   os.Exit(1)
+  // }
+  // defer conn.Close()
 
   r.GET("/", func(c *gin.Context) {
     http.ServeFile(c.Writer, c.Request, "./index.html")
@@ -44,7 +43,6 @@ func main() {
       allMessages []string
     )
 
-    //allMessages, _ := redis.Strings(conn.Do("LRANGE", "messages", 0, 1000))
     rows, _ := db.Query("SELECT content FROM messages ORDER BY timestamp ASC")
     defer rows.Close()
     for rows.Next() {
@@ -64,7 +62,8 @@ func main() {
   })
 
   m.HandleMessage(func(s *melody.Session, msg []byte) {
-    // conn.Do("RPUSH", "messages", string(msg))
+    fmt.Println(string(msg))
+    insert_stmt, _ := db.Prepare("INSERT messages SET user_id=?,message_type=?,content=?,timestamp=?")
     _, err := insert_stmt.Exec(1, "text", string(msg), time.Now())
     if err != nil {
       fmt.Println(err)
