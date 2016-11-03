@@ -86,7 +86,13 @@
 	    value: function setUsername(username) {
 	      var _this2 = this;
 
-	      fetch('/login', { method: 'POST', body: { username: username } }).then(function (response) {
+	      fetch('/login', {
+	        method: 'POST',
+	        headers: {
+	          "Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
+	        },
+	        body: 'username=' + username
+	      }).then(function (response) {
 	        return response.json();
 	      }).then(function (json) {
 	        _this2.setState({ user: json.user });

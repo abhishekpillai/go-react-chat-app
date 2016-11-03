@@ -11,7 +11,13 @@ class App extends React.Component {
   }
 
   setUsername(username) {
-    fetch('/login', { method: 'POST', body: { username: username }})
+    fetch('/login', {
+      method: 'POST',
+      headers: {
+        "Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
+      },
+      body: 'username='+username
+    })
       .then((response) => { return response.json(); })
       .then((json) => { this.setState({ user: json.user }); });
   }

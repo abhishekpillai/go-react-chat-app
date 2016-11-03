@@ -33,11 +33,25 @@ func main() {
   })
 
   r.POST("/login", func(c *gin.Context) {
-    c.JSON(200, gin.H{
-      "user": User{ 1, "abhi" },
-    })
+    username := c.PostForm("username")
 
-    // rows, _ := db.QueryRow("SELECT id FROM users where username=?",)
+    var id int
+    err := db.QueryRow("SELECT id FROM users where username=?", username).Scan(&id)
+
+    switch {
+    case err == sql.ErrNoRows:
+      insert_stmt, _ := db.Prepare("INSERT users SET username=?")
+      _, err = insert_stmt.Exec(username)
+      db.QueryRow("SELECT id FROM users where username=?", username).Scan(&id)
+    case err != nil:
+      fmt.Println(err)
+    default:
+      fmt.Printf("Username is %s\n", username)
+    }
+
+    c.JSON(200, gin.H{
+      "user": User{ id, username },
+    })
   })
 
   r.GET("/allMessages", func(c *gin.Context) {
