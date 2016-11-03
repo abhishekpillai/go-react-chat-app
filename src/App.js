@@ -1,7 +1,61 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+class SubmitOnEnterForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {value: ''};
+    this.handleChange = this.handleChange.bind(this);
+    this.handleOnKeyDown = this.handleOnKeyDown.bind(this);
+  }
+
+  handleChange(event) {
+    this.setState({value: event.target.value});
+  }
+
+  handleOnKeyDown(event) {
+    if (event.keyCode === 13 && this.state.value !== "") {
+      this.props.onSubmit(this.state.value);
+    }
+  }
+
+  render() {
+    return (
+      <input
+        type="text"
+        placeholder={this.props.placeholder}
+        value={this.state.value}
+        onChange={this.handleChange}
+        onKeyDown={this.handleOnKeyDown}
+      />
+    );
+  }
+}
+
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {user: null};
+    this.setUsername = this.setUsername.bind(this);
+  }
+
+  setUsername(username) {
+    fetch('/login', { method: 'POST', body: { username: username }})
+      .then((response) => { return response.json(); })
+      .then((json) => { this.setState({ user: json.user });  });
+  }
+
+  render () {
+    return (
+      <SubmitOnEnterForm
+        placeholder="Enter your username"
+        onSubmit={this.setUsername}
+      />
+    )
+  }
+}
+
 ReactDOM.render(
-  <h1>Hello Again World</h1>,
+  <App />,
   document.getElementById('root')
 )

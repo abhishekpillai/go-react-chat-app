@@ -16,6 +16,11 @@ type Msg struct {
   Username, Content string
 }
 
+type User struct {
+  Id int
+  Username string
+}
+
 func main() {
   r := gin.Default()
   m := melody.New()
@@ -25,6 +30,14 @@ func main() {
 
   r.GET("/", func(c *gin.Context) {
     http.ServeFile(c.Writer, c.Request, "./public/index.html")
+  })
+
+  r.POST("/login", func(c *gin.Context) {
+    c.JSON(200, gin.H{
+      "user": User{ 1, "abhi" },
+    })
+
+    // rows, _ := db.QueryRow("SELECT id FROM users where username=?",)
   })
 
   r.GET("/allMessages", func(c *gin.Context) {
