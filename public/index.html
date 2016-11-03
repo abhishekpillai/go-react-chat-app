@@ -4,7 +4,7 @@
   </head>
 
   <style>
-    #chat {
+    .chat-room {
       text-align: left;
       background: #f1f1f1;
       width: 500px;
@@ -12,47 +12,10 @@
       padding: 20px;
     }
   </style>
-  <script
-    src="https://code.jquery.com/jquery-3.1.1.min.js"
-      integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
-      crossorigin="anonymous">
-  </script>
   <body>
     <center>
-      <h3>Chat</h3>
-      <pre id="chat"></pre>
       <div id="root"></div>
-      <input placeholder="say something" id="text" type="text">
     </center>
-
-    <script>
-      var url = "ws://" + window.location.host + "/ws";
-      var ws = new WebSocket(url);
-      var name = "Guest" + Math.floor(Math.random() * 1000);
-      var chat = document.getElementById("chat");
-      var text = document.getElementById("text");
-      var now = function () {
-        var iso = new Date().toISOString();
-        return iso.split("T")[1].split(".")[0];
-      };
-      $.get("/allMessages", function (data) {
-        for (message in data["messages"]) {
-          var line =  now() + " " + data["messages"][message] + "\n";
-          chat.innerText += line;
-        }
-      });
-
-      ws.onmessage = function (msg) {
-        var line =  now() + " " + msg.data + "\n";
-        chat.innerText += line;
-      };
-      text.onkeydown = function (e) {
-        if (e.keyCode === 13 && text.value !== "") {
-          ws.send(JSON.stringify({ username: name, content: ("<" + name + "> " + text.value)}));
-          text.value = "";
-        }
-      };
-    </script>
     <script src="public/app.bundle.js" charset="utf-8"></script>
   </body>
 </html>

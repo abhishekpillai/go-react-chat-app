@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import SubmitOnEnterForm from './components/SubmitOnEnterForm.jsx';
+import ChatRoom from './components/ChatRoom.jsx';
 
 class App extends React.Component {
   constructor(props) {
@@ -23,25 +24,25 @@ class App extends React.Component {
   }
 
   render () {
-    let app;
-
     let loginForm = (
-      <SubmitOnEnterForm
-        placeholder="Enter your username"
-        onSubmit={this.setUsername} />
+      // set propTypes in this component
+      <div>
+        <h1>Login</h1>
+        <SubmitOnEnterForm
+          placeholder="Enter your username"
+          onSubmit={this.setUsername} />
+      </div>
     )
 
     let sharedChatRoom = (
-      <div></div>
+      <ChatRoom user={this.state.user} />
     )
 
     if (this.state.user) {
-      app = sharedChatRoom;
+      return sharedChatRoom;
     } else {
-      app = loginForm;
+      return loginForm;
     }
-
-    return app;
   }
 }
 

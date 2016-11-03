@@ -60,6 +60,10 @@
 
 	var _SubmitOnEnterForm2 = _interopRequireDefault(_SubmitOnEnterForm);
 
+	var _ChatRoom = __webpack_require__(173);
+
+	var _ChatRoom2 = _interopRequireDefault(_ChatRoom);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -101,21 +105,28 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var app = void 0;
+	      var loginForm =
+	      // set propTypes in this component
+	      _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'h1',
+	          null,
+	          'Login'
+	        ),
+	        _react2.default.createElement(_SubmitOnEnterForm2.default, {
+	          placeholder: 'Enter your username',
+	          onSubmit: this.setUsername })
+	      );
 
-	      var loginForm = _react2.default.createElement(_SubmitOnEnterForm2.default, {
-	        placeholder: 'Enter your username',
-	        onSubmit: this.setUsername });
-
-	      var sharedChatRoom = _react2.default.createElement('div', null);
+	      var sharedChatRoom = _react2.default.createElement(_ChatRoom2.default, { user: this.state.user });
 
 	      if (this.state.user) {
-	        app = sharedChatRoom;
+	        return sharedChatRoom;
 	      } else {
-	        app = loginForm;
+	        return loginForm;
 	      }
-
-	      return app;
 	    }
 	  }]);
 
@@ -21539,6 +21550,7 @@
 	    value: function handleOnKeyDown(event) {
 	      if (event.keyCode === 13 && this.state.value !== "") {
 	        this.props.onSubmit(this.state.value);
+	        this.setState({ value: '' });
 	      }
 	    }
 	  }, {
@@ -21558,6 +21570,115 @@
 	}(_react2.default.Component);
 
 	module.exports = SubmitOnEnterForm;
+
+/***/ },
+/* 173 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(34);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
+	var _SubmitOnEnterForm = __webpack_require__(172);
+
+	var _SubmitOnEnterForm2 = _interopRequireDefault(_SubmitOnEnterForm);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var ChatRoom = function (_React$Component) {
+	  _inherits(ChatRoom, _React$Component);
+
+	  function ChatRoom(props) {
+	    _classCallCheck(this, ChatRoom);
+
+	    var _this = _possibleConstructorReturn(this, (ChatRoom.__proto__ || Object.getPrototypeOf(ChatRoom)).call(this, props));
+
+	    _this.state = { messages: [] };
+	    _this.ws;
+	    _this.initSocket = _this.initSocket.bind(_this);
+	    _this.sendMessage = _this.sendMessage.bind(_this);
+	    return _this;
+	  }
+
+	  _createClass(ChatRoom, [{
+	    key: 'initSocket',
+	    value: function initSocket() {
+	      var _this2 = this;
+
+	      this.ws = new WebSocket("ws://" + window.location.host + "/ws");
+	      this.ws.onmessage = function (msg) {
+	        _this2.state.messages.push(msg.data);
+	        _this2.setState({ messages: _this2.state.messages });
+	      };
+	    }
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      var _this3 = this;
+
+	      fetch("/allMessages").then(function (response) {
+	        return response.json();
+	      }).then(function (data) {
+	        _this3.setState({ messages: data.messages || [] });
+	      });
+
+	      this.initSocket();
+	    }
+	  }, {
+	    key: 'generateTimestamp',
+	    value: function generateTimestamp() {
+	      var iso = new Date().toISOString();
+	      return iso.split("T")[1].split(".")[0];
+	    }
+	  }, {
+	    key: 'sendMessage',
+	    value: function sendMessage(message) {
+	      this.ws.send(JSON.stringify({
+	        userId: this.props.user.Id,
+	        content: this.generateTimestamp() + " <" + this.props.user.Username + "> " + message
+	      }));
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'h3',
+	          null,
+	          'Chat'
+	        ),
+	        _react2.default.createElement(
+	          'pre',
+	          { className: 'chat-room' },
+	          this.state.messages.join('\n')
+	        ),
+	        _react2.default.createElement(_SubmitOnEnterForm2.default, {
+	          placeholder: 'speak your mind',
+	          onSubmit: this.sendMessage })
+	      );
+	    }
+	  }]);
+
+	  return ChatRoom;
+	}(_react2.default.Component);
+
+	module.exports = ChatRoom;
 
 /***/ }
 /******/ ]);

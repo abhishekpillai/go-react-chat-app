@@ -16,6 +16,7 @@ class SubmitOnEnterForm extends React.Component {
   handleOnKeyDown(event) {
     if (event.keyCode === 13 && this.state.value !== "") {
       this.props.onSubmit(this.state.value);
+      this.setState({ value: '' });
     }
   }
 
