@@ -34,9 +34,7 @@ class App extends React.Component {
       </div>
     )
 
-    let sharedChatRoom = (
-      <ChatRoom user={this.state.user} />
-    )
+    let sharedChatRoom = <ChatRoom user={this.state.user} />
 
     if (this.state.user) {
       return sharedChatRoom;

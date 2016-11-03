@@ -10,6 +10,7 @@ import (
   _ "github.com/go-sql-driver/mysql"
   "time"
   "encoding/json"
+  "strconv"
 )
 
 type Msg struct {
@@ -22,17 +23,17 @@ type User struct {
 }
 
 func main() {
-  r := gin.Default()
+  router := gin.Default()
   m := melody.New()
 
   db_url := os.Getenv("SHAREDCHAT_DB_URL")
   db, _ := sql.Open("mysql", db_url)
 
-  r.GET("/", func(c *gin.Context) {
+  router.GET("/", func(c *gin.Context) {
     http.ServeFile(c.Writer, c.Request, "./public/index.html")
   })
 
-  r.POST("/login", func(c *gin.Context) {
+  router.POST("/login", func(c *gin.Context) {
     username := c.PostForm("username")
 
     var id int
@@ -54,7 +55,7 @@ func main() {
     })
   })
 
-  r.GET("/allMessages", func(c *gin.Context) {
+  router.GET("/allMessages", func(c *gin.Context) {
     var (
       content string
       allMessages []string
@@ -75,7 +76,32 @@ func main() {
     })
   })
 
-  r.GET("/ws", func(c *gin.Context) {
+  router.GET("/newMessages", func(c *gin.Context) {
+    var (
+      content string
+      newMessages []string
+    )
+
+    i, _ := strconv.ParseInt(c.Query("since"), 10, 64)
+    since := time.Unix(i, 0)
+    fmt.Println(since)
+    rows, _ := db.Query("SELECT content FROM messages where timestamp > ? ORDER BY timestamp ASC", since)
+    defer rows.Close()
+
+    for rows.Next() {
+      err := rows.Scan(&content)
+      if err != nil {
+        fmt.Println(err)
+      }
+      newMessages = append(newMessages, content)
+    }
+
+    c.JSON(200, gin.H{
+      "messages": newMessages,
+    })
+  })
+
+  router.GET("/ws", func(c *gin.Context) {
     m.HandleRequest(c.Writer, c.Request)
   })
 
@@ -94,6 +120,6 @@ func main() {
     m.Broadcast([]byte(msg_data.Content))
   })
 
-  r.Static("/public", "./public")
-  r.Run(":5000")
+  router.Static("/public", "./public")
+  router.Run(":5000")
 }
