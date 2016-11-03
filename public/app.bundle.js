@@ -95,10 +95,21 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      return _react2.default.createElement(_SubmitOnEnterForm2.default, {
+	      var app = void 0;
+
+	      var loginForm = _react2.default.createElement(_SubmitOnEnterForm2.default, {
 	        placeholder: 'Enter your username',
-	        onSubmit: this.setUsername
-	      });
+	        onSubmit: this.setUsername });
+
+	      var sharedChatRoom = _react2.default.createElement('div', null);
+
+	      if (this.state.user) {
+	        app = sharedChatRoom;
+	      } else {
+	        app = loginForm;
+	      }
+
+	      return app;
 	    }
 	  }]);
 

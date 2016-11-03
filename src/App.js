@@ -13,16 +13,29 @@ class App extends React.Component {
   setUsername(username) {
     fetch('/login', { method: 'POST', body: { username: username }})
       .then((response) => { return response.json(); })
-      .then((json) => { this.setState({ user: json.user });  });
+      .then((json) => { this.setState({ user: json.user }); });
   }
 
   render () {
-    return (
+    let app;
+
+    let loginForm = (
       <SubmitOnEnterForm
         placeholder="Enter your username"
-        onSubmit={this.setUsername}
-      />
+        onSubmit={this.setUsername} />
     )
+
+    let sharedChatRoom = (
+      <div></div>
+    )
+
+    if (this.state.user) {
+      app = sharedChatRoom;
+    } else {
+      app = loginForm;
+    }
+
+    return app;
   }
 }
 
