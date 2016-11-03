@@ -24,7 +24,7 @@ func main() {
   db, _ := sql.Open("mysql", db_url)
 
   r.GET("/", func(c *gin.Context) {
-    http.ServeFile(c.Writer, c.Request, "./index.html")
+    http.ServeFile(c.Writer, c.Request, "./public/index.html")
   })
 
   r.GET("/allMessages", func(c *gin.Context) {
@@ -67,5 +67,6 @@ func main() {
     m.Broadcast([]byte(msg_data.Content))
   })
 
+  r.Static("/public", "./public")
   r.Run(":5000")
 }
