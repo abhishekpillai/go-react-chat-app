@@ -112,8 +112,8 @@ func main() {
       fmt.Println(err)
     }
 
-    insert_stmt, _ := db.Prepare("INSERT messages SET user_id=?,message_type=?,content=?,timestamp=?")
-    _, err = insert_stmt.Exec(1, "text", msg_data.Content, time.Now())
+    insert_stmt, _ := db.Prepare("INSERT messages SET username=?,message_type=?,content=?,timestamp=?")
+    _, err = insert_stmt.Exec(msg_data.Username, "text", msg_data.Content, time.Now())
     if err != nil {
       fmt.Println(err)
     }

@@ -36,7 +36,7 @@ class ChatRoom extends React.Component {
   sendMessage (message) {
     this.ws.send(
       JSON.stringify({
-        userId: this.props.user.Id,
+        username: this.props.user.Username,
         content: (this.generateTimestamp() + " <" + this.props.user.Username + "> " + message)
       })
     );

@@ -1,6 +1,6 @@
 create table messages (
   id MEDIUMINT NOT NULL AUTO_INCREMENT,
-  user_id MEDIUMINT,
+  username VARCHAR(40) NOT NULL,
   message_type VARCHAR(20) NOT NULL,
   content TEXT NOT NULL,
   timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
