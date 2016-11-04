@@ -23,3 +23,11 @@ First time using Go! Including the following that helped setup the backend struc
 * [Redis, Go, & How to Build a Chat Application - Compose](https://www.compose.com/articles/redis-go-and-how-to-build-a-chat-application/)
 * [Using WebSockets on Heroku with Go](https://devcenter.heroku.com/articles/go-websockets)
 * [Writing Real-Time Web Apps in Go: Chat](https://medium.com/@olahol/writing-real-time-web-apps-in-go-chat-4aa058644f73#.6ttdfnbcn)
+
+### Improvements for following iterations
+- [] separate timestamp and username from stored message
+- [] extract reusable parts of golang server into separate funcs and files
+- [] use redigo to register websockets and allow chat to scale above one server
+- [] add testing for golang server
+- [] add testing for react app
+- [] make it prettier
