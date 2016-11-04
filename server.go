@@ -121,5 +121,6 @@ func main() {
   })
 
   router.Static("/public", "./public")
+  router.Static("/assets/js", "./bin")
   router.Run(":5000")
 }
