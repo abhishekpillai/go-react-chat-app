@@ -7,7 +7,8 @@ First time using Go! Including the following that helped setup the backend struc
 #### Setup
 * Install Golang: https://golang.org/doc/install
 * `go install`
-* `yarn install` or `npm install`
+* `yarn` or `npm install`
+* `npm install -g webpack`
 * `webpack`
 * `go-react-chat-app`
 * Go to localhost:5000 and use the chat!
