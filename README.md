@@ -8,7 +8,7 @@ First time using Go! Including the following that helped setup the backend struc
 * Install Golang: https://golang.org/doc/install
 * Make sure you have mysql installed and proper permissions and (npm or yarn)
 * Log into mysql console and create a DB in mysql: `create database sharedchat`
-* Run the two create table commands in tables.sql file within the sharedchat db
+* Load db from sql structure sql, replace following command with your username and password: `mysql -u username -p sharedchat < sharedchat_db_structure.sql`
 * `export SHAREDCHAT_DB_URL=username:password@/sharedchat?charset=utf8`
 * `go install`
 * `yarn` or `npm install`
