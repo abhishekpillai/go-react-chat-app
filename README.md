@@ -4,6 +4,9 @@ First time using Go! Including the following that helped setup the backend struc
 * [Gin](https://github.com/gin-gonic/gin)
 * [Melody](https://github.com/olahol/melody/)
 
+![go-react-chat-app-gif](https://cloud.githubusercontent.com/assets/1326555/20007498/e37f863c-a272-11e6-89a9-63b7c31ba2b8.gif)
+
+
 #### Setup
 * Install Golang: https://golang.org/doc/install
 * Make sure you have mysql installed and proper permissions and (npm or yarn)
